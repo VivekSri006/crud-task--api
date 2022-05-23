@@ -151,6 +151,69 @@ app.delete('/tasklists/:tasklistId',(req,res)=>{
     })
 })
 
+
+
+/* CRUD application for task, a task should always belong to a TaskList */
+//Get all tasks for 1 TaskList, http://localhost:3000/taskslists/:tasklistId/tasks
+app.get('/taskslists/:tasklistId/tasks',(req,res)=>{
+    Task.find({ _taskListId : req.params.tasklistId })
+    .then((tasks)=>{
+        res.status(200).send(tasks)
+    })
+    .catch((error)=>{
+        console.log(error)
+        res.status(500)
+    })
+})
+
+//Create a task inside a particular Task List
+app.post('/taskslists/:tasklistId/tasks',(req,res)=>{
+    let taskObj = { 'title': req.body.title ,'_taskListId': req.params.tasklistId };
+    Task(taskObj).save()
+    .then((task)=>{
+        res.status(201);
+        res.send(task);
+    })
+    .catch((error)=>{
+        console.log(error); 
+        res.status(500);
+    })
+})
+
+
+// http://localhost:3000/tasklists/:tasklistId/tasks/:taskId
+//Get 1 tasks for 1 TaskList, http://localhost:3000/taskslists/:tasklistId/tasks
+app.get('/taskslists/:tasklistId/tasks/:taskId',(req,res)=>{
+    Task.findOne({ _taskListId : req.params.tasklistId, _id:req.params.taskId })
+    .then((task)=>{
+        res.status(200).send(task)
+    })
+    .catch((error)=>{
+        console.log(error)
+        res.status(500)
+    })
+})
+
+//Update one task belonging to one task list
+app.patch('/taskslists/:tasklistId/tasks/:taskId',(req,res)=>{
+
+    Task.findOneAndUpdate({
+        _taskListId:req.params.tasklistId, _id: req.params.taskId
+    },
+    {
+        $set:req.body
+    })
+    .then((task)=>{
+        res.status(201).send(task)
+    })
+    .catch((error)=>{
+        console.log(error)
+        res.status(500)
+    })
+})
+
+
+
 // app.listen(3000, function(){
 //     console.log("Server started on port 3000");
 // });

@@ -6,14 +6,13 @@ const TaskSchema = new mongoose.Schema({
         trim:true,
         minlength:3
     },
-    _TaskListId:{
+    _taskListId:{
         type:mongoose.Types.ObjectId,
         required:true
     },
     completed:{
         type:Boolean,
-        default:false,
-        required:true
+        default:false
     }
 });
 
