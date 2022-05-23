@@ -4,7 +4,8 @@ const app = express();
 const mongoose = require('./database/mongoose')
 
 const TaskList= require('./database/models/taskList')
-const Task = require('./database/models/task')
+const Task = require('./database/models/task');
+const { application } = require("express");
 
 //Example of Middleware
 
@@ -67,6 +68,20 @@ app.get('/tasklists',(req,res)=>{
 })
 
 
+//Endpointd to get one tasklists by tasklist ID
+app.get('/tasklists/:tasklistId',(req,res)=>{
+    let tasklistId = req.params.tasklistId;
+    TaskList.find({ _id: tasklistId})
+    .then((taskList)=>{
+        res.status(200).send(taskList);
+    })
+    .catch((error)=>{
+        console.log(error);
+        res.status(500);
+    })
+})
+
+
 // Routes or Endpoints for creating a tasklist
 
 app.post('/tasklists',(req,res)=>{
@@ -86,6 +101,55 @@ app.post('/tasklists',(req,res)=>{
     })
 })
 
+
+//Put --> To update Everything of Object63 (Pull update of Object)
+app.put('/tasklists/:tasklistId',(req,res)=>{
+
+    TaskList.findOneAndUpdate({
+        _id:req.params.tasklistId
+    },
+    {
+        $set:req.body
+    })
+    .then((taskList)=>{
+        res.status(200).send(taskList)
+    })
+    .catch((error)=>{
+        console.log(error)
+        res.status(500)
+    })
+})
+
+//Patch --> to Update of one fieldof Object
+app.patch('/tasklists/:tasklistId',(req,res)=>{
+
+    TaskList.findOneAndUpdate({
+        _id:req.params.tasklistId
+    },
+    {
+        $set:req.body
+    })
+    .then((taskList)=>{
+        res.status(201).send(taskList)
+    })
+    .catch((error)=>{
+        console.log(error)
+        res.status(500)
+    })
+})
+
+//Delete a TaskList by Id
+app.delete('/tasklists/:tasklistId',(req,res)=>{
+
+    TaskList.findByIdAndDelete(req.params.tasklistId)
+    .then((taskList)=>{
+        res.status(201).send(taskList)
+    })
+    .catch((error)=>{
+        console.log(error)
+        res.status(500)
+    })
+})
 
 // app.listen(3000, function(){
 //     console.log("Server started on port 3000");
