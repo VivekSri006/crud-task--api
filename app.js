@@ -213,6 +213,21 @@ app.patch('/taskslists/:tasklistId/tasks/:taskId',(req,res)=>{
 })
 
 
+//Delete one task belonging to one task list
+app.delete('/taskslists/:tasklistId/tasks/:taskId',(req,res)=>{
+
+    Task.findOneAndDelete({
+        _taskListId:req.params.tasklistId, _id: req.params.taskId
+    })
+    .then((task)=>{
+        res.status(201).send(task)
+    })
+    .catch((error)=>{
+        console.log(error)
+        res.status(500)
+    })
+})
+
 
 // app.listen(3000, function(){
 //     console.log("Server started on port 3000");
