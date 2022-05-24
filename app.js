@@ -228,7 +228,29 @@ app.delete('/taskslists/:tasklistId/tasks/:taskId',(req,res)=>{
     })
 })
 
+//Delete all Task within Id
+app.delete('/taskslists/:tasklistId',(req,res)=>{
 
+
+    const deleteAllContainingTask = (taskList)=>{
+        Task.deleteMany({_taskListId: req.params.tasklistId})
+        .then(()=>{
+            return taskList       
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
+    }
+    const responseTaskList = TaskList.findByIdAndDelete(req.params.tasklistId)
+    .then((taskList)=>{
+        deleteAllContainingTask(taskList);
+    })
+    .catch((error)=>{
+        console.log(error)
+        res.status(204).send(responseTaskList)
+        
+    })
+})
 // app.listen(3000, function(){
 //     console.log("Server started on port 3000");
 // });
