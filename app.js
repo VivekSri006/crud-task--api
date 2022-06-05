@@ -241,6 +241,7 @@ app.delete('/taskslists/:tasklistId',(req,res)=>{
             console.log(error);
         })
     }
+
     const responseTaskList = TaskList.findByIdAndDelete(req.params.tasklistId)
     .then((taskList)=>{
         deleteAllContainingTask(taskList);
@@ -250,6 +251,7 @@ app.delete('/taskslists/:tasklistId',(req,res)=>{
         res.status(204).send(responseTaskList)
         
     })
+    
 })
 // app.listen(3000, function(){
 //     console.log("Server started on port 3000");
